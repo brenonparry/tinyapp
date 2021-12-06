@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/brenonparry/tinyapp/issues"
   },
-  "homepage": "https://github.com/brenonparry/tinyapp#readme"
+  "homepage": "https://github.com/brenonparry/tinyapp#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
