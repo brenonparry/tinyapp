@@ -6,7 +6,7 @@ const urlDatabase = {
   "b2xvn2": "http://www.lighthouselabs.ca",
   "9sm5xk": "http://www.google.com"
 };
-
+// const photo = '/Users/brenonparry/lighthouse/w3/tinyapp/lloyd.jpg'
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
@@ -15,11 +15,15 @@ app.get("/urls", (req, res) => {
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   if (!templateVars.longURL) {
-    res.status(400).send("NO GOOD!");
+    res.status(400).send("I got robbed by a sweet old lday on a motorized cart...and I didn't even see it coming");
     return;
   }
   res.render("urls_show", templateVars);
 });
+
+// app.get("/new", (req, res) => {
+//   res.sendFile(photo);
+// });
 
 app.get("/", (req, res) => {
   res.send("A work in progress!");
