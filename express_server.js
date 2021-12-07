@@ -14,7 +14,7 @@ const urlDatabase = {
 const generateRandomString = function() {
   return Math.random().toString(20).substring(2, 8)
 }
-console.log(generateRandomString());
+// console.log(generateRandomString());
 // ROUTES =>
 app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase }; 
@@ -34,10 +34,7 @@ app.post("/urls", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-  // if (!templateVars.longURL) {
-  //   res.status(400).send("I got robbed by a sweet old lday on a motorized cart...and I didn't even see it coming");
-  //   return;
-  // }
+
   res.render("urls_show", templateVars);
 });
 
@@ -46,11 +43,13 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
+app.post('/urls/:shortURL/delete', (req,res) => {
+  const shortURL = req.params.shortURL
+  console.log(shortURL);
+  delete urlDatabase[shortURL];
+  res.redirect("/urls");
+});
 
-
-// app.get("/new", (req, res) => {
-//   res.sendFile(photo);
-// });
 
 app.get("/", (req, res) => {
   res.send("A work in progress!");
@@ -60,18 +59,6 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 })
 
-// app.get("/hello", (req, res) => {
-//   res.send("<html><body>Hello <b>World</b></body></html>\n");
-// });
-
-// app.get("/set", (req, res) => {
-//   const a = 1;
-//   res.send(`a = ${a}`);
-//  });
- 
-//  app.get("/fetch", (req, res) => {
-//   res.send(`a = ${a}`);
-//  });
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
