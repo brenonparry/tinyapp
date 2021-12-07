@@ -26,18 +26,22 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  
-  res.send("Ok");        
+  console.log(req.body);
+  const randomURL = generateRandomString();
+  urlDatabase[randomURL] = req.body.longURL;
+  res.redirect(`/urls/${randomURL}`);      
 });
 
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-  if (!templateVars.longURL) {
-    res.status(400).send("I got robbed by a sweet old lday on a motorized cart...and I didn't even see it coming");
-    return;
-  }
+  // if (!templateVars.longURL) {
+  //   res.status(400).send("I got robbed by a sweet old lday on a motorized cart...and I didn't even see it coming");
+  //   return;
+  // }
   res.render("urls_show", templateVars);
 });
+
+
 
 // app.get("/new", (req, res) => {
 //   res.sendFile(photo);
