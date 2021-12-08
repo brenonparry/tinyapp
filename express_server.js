@@ -13,7 +13,18 @@ const urlDatabase = {
   "b2xvn2": "http://www.lighthouselabs.ca",
   "9sm5xk": "http://www.google.com"
 };
-
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "lloyd_christmas", 
+    password: "abc"
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "harry_dunne", 
+    password: "123"
+  }
+}
 const generateRandomString = function() {
   return Math.random().toString(20).substring(2, 8)
 }
