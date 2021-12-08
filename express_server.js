@@ -26,23 +26,39 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);
   const randomURL = generateRandomString();
   urlDatabase[randomURL] = req.body.longURL;
   res.redirect(`/urls/${randomURL}`);      
 });
 
+
 app.get("/urls/:shortURL", (req, res) => {
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-
   res.render("urls_show", templateVars);
 });
 
-app.get("/u/:shortURL", (req, res) => {
+// SHORT URL LINK TO LONG URL
+app.get("/urls/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
 });
 
+// EDIT URL
+app.post('/urls/:shortURL', (req,res) => {
+  const shortURL = req.params.shortURL
+  res.redirect(shortURL);
+});
+
+// SUBMIT NEW URL
+app.post('/urls/:shortURL/submit', (req,res) => {
+  const shortURL = req.params.shortURL
+  // console.log(shortURL);
+  // console.log(req.body);
+  urlDatabase[shortURL] = req.body.newURL;
+  res.redirect("/urls");
+});
+
+// DELETE URL
 app.post('/urls/:shortURL/delete', (req,res) => {
   const shortURL = req.params.shortURL
   console.log(shortURL);
@@ -50,7 +66,7 @@ app.post('/urls/:shortURL/delete', (req,res) => {
   res.redirect("/urls");
 });
 
-
+// '/' HOME PAGE
 app.get("/", (req, res) => {
   res.send("A work in progress!");
 });
