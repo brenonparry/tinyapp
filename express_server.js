@@ -32,8 +32,11 @@ const generateRandomString = function() {
 
 // ROUTES
 app.get("/urls/register", (req, res) => {
+  const id = req.cookies.user_id
   const templateVars = { 
-    username: req.cookies.username
+    username: req.cookies.username,
+    user: users[id]
+
   };
   res.render("urls_register", templateVars);
 });
@@ -53,17 +56,21 @@ app.post("/urls/register", (req, res) => {
   res.redirect("/urls")
 })
 app.get("/urls", (req, res) => {
+  const id = req.cookies.user_id
   const templateVars = { 
     urls: urlDatabase,
-    username: req.cookies.username
+    username: req.cookies.username,
+    user: users[id]
   }; 
   // console.log("templateVars: ", templateVars)
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
+  const id = req.cookies.user_id
   const templateVars = { 
-    username: req.cookies.username
+    username: req.cookies.username,
+    user: users[id]
   };
   res.render("urls_new", templateVars);
 });
@@ -83,15 +90,16 @@ app.post('/urls/login', (req,res) => {
 
 // POST LOGOUT
 app.post('/urls/logout', (req,res) => {
-  res.clearCookie('username')
+  res.clearCookie('user_id')
   res.redirect("/urls");
 });
 
 app.get("/urls/:shortURL", (req, res) => {
+  const id = req.cookies.user_id
   const templateVars = { 
     shortURL: req.params.shortURL, 
     longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies.username
+    user: users[id]
   };
   res.render("urls_show", templateVars);
 });
