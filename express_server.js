@@ -14,14 +14,14 @@ const urlDatabase = {
   "9sm5xk": "http://www.google.com"
 };
 const users = { 
-  "userRandomID": {
-    id: "userRandomID", 
-    email: "lloyd_christmas", 
+  "6h8dv3": {
+    id: "6h8dv3", 
+    email: "lloyd_christmas@D&D.com", 
     password: "abc"
   },
- "user2RandomID": {
-    id: "user2RandomID", 
-    email: "harry_dunne", 
+ "dd5ts4": {
+    id: "dd5ts4", 
+    email: "harry_dunneD&D.com", 
     password: "123"
   }
 }
@@ -33,13 +33,25 @@ const generateRandomString = function() {
 // ROUTES
 app.get("/urls/register", (req, res) => {
   const templateVars = { 
-    // shortURL: req.params.shortURL, 
-    // longURL: urlDatabase[req.params.shortURL],
     username: req.cookies.username
   };
   res.render("urls_register", templateVars);
 });
 
+app.post("/urls/register", (req, res) => {
+  const id = generateRandomString()
+  const email = req.body.email
+  const password = req.body.password
+  // console.log("req.body: ", req.body)
+  users[id] = {
+    id: id,
+    email: email,
+    password: password
+  }
+  console.log("users: ", users)
+  res.cookie("user_id", id)
+  res.redirect("/urls")
+})
 app.get("/urls", (req, res) => {
   const templateVars = { 
     urls: urlDatabase,
