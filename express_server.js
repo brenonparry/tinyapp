@@ -13,7 +13,7 @@ const urlDatabase = {
   "b2xvn2": "http://www.lighthouselabs.ca",
   "9sm5xk": "http://www.google.com"
 };
-const users = { 
+const users = {
   "6h8dv3": {
     id: "6h8dv3", 
     email: "lloyd_christmas@D&D.com", 
@@ -28,6 +28,16 @@ const users = {
 const generateRandomString = function() {
   return Math.random().toString(20).substring(2, 8)
 }
+const checkUserEmail = (email) => {
+  for(const id in users) {
+    const user = users[id];
+    if(user.email === email) {
+      return user;
+    }
+  }
+  return null;
+}
+
 
 
 // ROUTES
@@ -45,7 +55,16 @@ app.post("/urls/register", (req, res) => {
   const id = generateRandomString()
   const email = req.body.email
   const password = req.body.password
+  const user = checkUserEmail(email);
   // console.log("req.body: ", req.body)
+  if (!email || !password) {
+    return res.status(400).send("email and/or password cannot be blank!");
+  }
+  
+  if(user){
+    return res.status(400).send("user already exists")
+  }
+
   users[id] = {
     id: id,
     email: email,
@@ -82,10 +101,24 @@ app.post("/urls", (req, res) => {
 });
 
 // POST login + cookie
-app.post('/urls/login', (req,res) => {
-  const user = req.body.username;
-  res.cookie('username', user);
-  res.redirect("/urls");
+// app.post('/urls/login', (req,res) => {
+//   const user = req.body.username;
+//   res.cookie('username', user);
+//   res.redirect("/urls");
+// });
+app.get("/urls/login"), (req, res) => {
+  const id = req.cookies.user_id
+  const templateVars = { 
+    urls: urlDatabase,
+    username: req.cookies.username,
+    user: users[id]
+  }; 
+  res.render("urls_login", templateVars);
+}
+app.post('/urls/login', (req, res) => {
+  // const user = req.body.username;
+  // res.cookie('username', user);
+  res.redirect("/urls/login");
 });
 
 // POST LOGOUT
