@@ -21,9 +21,9 @@
         </div>
       <% } else { %>
         <div class="login-container">
-          <form method="POST" action="/urls/login">
-            <input type="text" placeholder="Username" name="username">
-            <button type="submit" class="btn btn-outline-light">Login</button>
+          <form method="POST">
+            <input type="text" placeholder="User email" name="username">
+            <a href="/urls/login" class="btn btn-outline-light">Login</a>
             <a href="/urls/register" class="btn btn-outline-light">Register</a>
           </form>
         </div>
