@@ -10,9 +10,9 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
-      <% if(username){ %>
+      <% if(user && user.email){ %>
         <div>
-          <%= username %>
+          <%= `Hello! You're logged in as: ${user.email}` %>
         </div>
         <div>
             <form method="POST" action="/urls/logout">
@@ -24,6 +24,7 @@
           <form method="POST" action="/urls/login">
             <input type="text" placeholder="Username" name="username">
             <button type="submit" class="btn btn-outline-light">Login</button>
+            <a href="/urls/register" class="btn btn-outline-light">Register</a>
           </form>
         </div>
         <% } %>
