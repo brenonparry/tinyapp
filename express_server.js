@@ -78,7 +78,7 @@ app.get("/urls", (req, res) => {
     urls: urlDatabase,
     user: users[id]
   }; 
-  // console.log("templateVars: ", templateVars)
+  
   res.render("urls_index", templateVars);
 });
 
@@ -134,7 +134,6 @@ app.post('/urls/login', (req, res) => {
 // LOGOUT
 app.post('/urls/logout', (req,res) => {
   res.clearCookie('user_id')
-  console.log("Users after LOGOUT: ", users)
   res.redirect("/urls/login");
 });
 
@@ -145,8 +144,7 @@ app.get("/urls/:shortURL", (req, res) => {
     longURL: urlDatabase[req.params.shortURL],
     user: users[id]
   };
-  console.log("req.params.shortURL :", req.params.shortURL)
-  console.log("This is the WRONG route")
+
   res.render("urls_show", templateVars);
 });
 
@@ -173,8 +171,8 @@ app.post('/urls/:shortURL/submit', (req,res) => {
 // "DELETE URL" POST
 app.post('/urls/:shortURL/delete', (req,res) => {
   const shortURL = req.params.shortURL
-  console.log(shortURL);
   delete urlDatabase[shortURL];
+
   res.redirect("/urls");
 });
 
