@@ -91,15 +91,11 @@ app.get("/urls", (req, res) => {
 app.post("/urls", (req, res) => {
   const randomURL = generateRandomString();
   const id = req.cookies.user_id
-  // console.log("one: ", urlDatabase);
-  // console.log("two: ", randomURL)
-  // console.log("three: ", req.body.longURL)
+
   urlDatabase[randomURL] = {}
   urlDatabase[randomURL].longURL = req.body.longURL
   urlDatabase[randomURL].userID = id
   
-
-  console.log("four: ", urlDatabase)
   res.redirect(`/urls/${randomURL}`);      
 });
 
@@ -167,11 +163,12 @@ app.get("/urls/:shortURL", (req, res) => {
     longURL: urlDatabase[shortURL].longURL,
     user: users[id]
   };
-  // console.log(urlDatabase[shortURL].longURL)
+
+  console.log("one: ", urlDatabase[shortURL].longURL)
   res.render("urls_show", templateVars);
 });
 
-// .get redirect => LONG URL
+// Redirect => LONG URL
 app.get("/u/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
   const longURL = urlDatabase[shortURL].longURL;
@@ -192,10 +189,16 @@ app.post('/urls/:shortURL', (req,res) => {
 // "SUBMIT NEW LONG URL" POST
 app.post('/urls/:shortURL/submit', (req,res) => {
   const shortURL = req.params.shortURL
-  urlDatabase[shortURL] = req.body.newURL;
-  console.log("one", req.params.shortURL)
-  console.log("two", urlDatabase[shortURL])
+  const id = req.cookies.user_id
+  console.log("before", urlDatabase)
+
+  urlDatabase[shortURL] = {}
+  urlDatabase[shortURL].longURL = req.body.newURL
+  urlDatabase[shortURL].userID = id
   
+  console.log("after", urlDatabase)
+
+  // res.send("yurr")
   res.redirect("/urls");
 });
 
