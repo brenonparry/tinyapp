@@ -16,12 +16,12 @@ const urlDatabase = {
 const users = {
   "6h8dv3": {
     id: "6h8dv3", 
-    email: "lloyd_christmas@D&D.com", 
+    email: "lloyd_christmas@DD.com", 
     password: "abc"
   },
  "dd5ts4": {
     id: "dd5ts4", 
-    email: "harry_dunneD&D.com", 
+    email: "harry_dunne@DD.com", 
     password: "123"
   }
 }
@@ -39,14 +39,11 @@ const checkUserEmail = (email) => {
 }
 
 
-
 // ROUTES
 app.get("/urls/register", (req, res) => {
   const id = req.cookies.user_id
   const templateVars = { 
-    username: req.cookies.username,
     user: users[id]
-
   };
   res.render("urls_register", templateVars);
 });
@@ -56,7 +53,7 @@ app.post("/urls/register", (req, res) => {
   const email = req.body.email
   const password = req.body.password
   const user = checkUserEmail(email);
-  // console.log("req.body: ", req.body)
+  
   if (!email || !password) {
     return res.status(400).send("email and/or password cannot be blank!");
   }
@@ -70,28 +67,19 @@ app.post("/urls/register", (req, res) => {
     email: email,
     password: password
   }
-  console.log("users: ", users)
+
   res.cookie("user_id", id)
   res.redirect("/urls")
 })
+
 app.get("/urls", (req, res) => {
   const id = req.cookies.user_id
   const templateVars = { 
     urls: urlDatabase,
-    username: req.cookies.username,
     user: users[id]
   }; 
   // console.log("templateVars: ", templateVars)
   res.render("urls_index", templateVars);
-});
-
-app.get("/urls/new", (req, res) => {
-  const id = req.cookies.user_id
-  const templateVars = { 
-    username: req.cookies.username,
-    user: users[id]
-  };
-  res.render("urls_new", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -100,31 +88,54 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${randomURL}`);      
 });
 
+app.get("/urls/new", (req, res) => {
+  const id = req.cookies.user_id
+  const templateVars = {
+    user: users[id]
+  };
+  res.render("urls_new", templateVars);
+});
+
 // POST login + cookie
 // app.post('/urls/login', (req,res) => {
 //   const user = req.body.username;
 //   res.cookie('username', user);
 //   res.redirect("/urls");
 // });
-app.get("/urls/login"), (req, res) => {
+
+
+// LOGIN
+app.get("/urls/login", (req, res) => {
   const id = req.cookies.user_id
   const templateVars = { 
     urls: urlDatabase,
-    username: req.cookies.username,
     user: users[id]
   }; 
-  res.render("urls_login", templateVars);
-}
+  // console.log("This is the right route")
+  res.render('urls_login', templateVars);
+});
 app.post('/urls/login', (req, res) => {
-  // const user = req.body.username;
-  // res.cookie('username', user);
-  res.redirect("/urls/login");
+  const email = req.body.email
+  const password = req.body.password;
+  const user = checkUserEmail(email)
+
+  if(!user){
+    return res.status(400).send("incorect email")
+  }
+  if(user.password !== password) {
+    return res.status(400).send('password does not match')
+  }
+
+  const id = user.id
+  res.cookie("user_id", id)
+  res.redirect("/urls");
 });
 
-// POST LOGOUT
+// LOGOUT
 app.post('/urls/logout', (req,res) => {
   res.clearCookie('user_id')
-  res.redirect("/urls");
+  console.log("Users after LOGOUT: ", users)
+  res.redirect("/urls/login");
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -134,6 +145,8 @@ app.get("/urls/:shortURL", (req, res) => {
     longURL: urlDatabase[req.params.shortURL],
     user: users[id]
   };
+  console.log("req.params.shortURL :", req.params.shortURL)
+  console.log("This is the WRONG route")
   res.render("urls_show", templateVars);
 });
 
@@ -146,6 +159,7 @@ app.get("/urls/:shortURL", (req, res) => {
 // "EDIT URL" POST
 app.post('/urls/:shortURL', (req,res) => {
   const shortURL = req.params.shortURL
+  // console.log("151")
   res.redirect(shortURL);
 });
 
