@@ -23,10 +23,10 @@
         </tr>
       </thead>
       <tbody>
-        <% for(const key in urlDatabase) { %>
+        <% for(const key in urls) { %>
           <tr>
             <td><%= key %></td>
-            <td><%= urlDatabase[key].longURL %></td>
+            <td><%= urls[key].longURL %></td>
             <td>
               <form method="POST" action="/urls/<%- key %>">
                 <button class="btn btn-outline-success">Edit</button>
