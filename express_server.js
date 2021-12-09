@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
+const bcrypt = require('bcryptjs');
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -34,6 +35,15 @@ const users = {
 const generateRandomString = function() {
   return Math.random().toString(20).substring(2, 8)
 }
+const checkUserPassword = (password) => {
+  for(const id in users) {
+    const user = users[id]
+      if(user.password === password) {
+        return user;
+    }
+  }
+  return null
+}
 const checkUserEmail = (email) => {
   for(const id in users) {
     const user = users[id];
@@ -55,22 +65,9 @@ const urlsForUser = (id) => {
   return userUrls;
 }
 
-// const keyForUser = (id) => {
-//   for(const key in urlDatabase) {
-//     const userID = urlDatabase[key].userID
-//     if (userID === id) {
-//       return key
-//     }
-//   }
-//   return null
-// }
-
 // ROUTES =>
 
-//
 // REGISTER
-//
-
 app.get("/urls/register", (req, res) => {
   const id = req.cookies.user_id
   const templateVars = { 
@@ -92,22 +89,21 @@ app.post("/urls/register", (req, res) => {
   if(user){
     return res.status(400).send("user already exists")
   }
+  const hashedPassword = bcrypt.hashSync(password, 10);
 
   users[id] = {
     id: id,
     email: email,
-    password: password
+    password: hashedPassword
   }
 
   res.cookie("user_id", id)
   res.redirect("/urls")
 })
 
-//
-// GENERAL
-//
-console.log("urlsForUser:+++++", urlsForUser('6h8dv3'))
+//-----------------------------------------------//
 
+// GENERAL
 app.get("/urls", (req, res) => {
   const id = req.cookies.user_id;
   const user = users[id]
@@ -132,10 +128,7 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${randomURL}`);      
 });
 
-//
 // CREATE NEW URL
-//
-
 app.get("/urls/new", (req, res) => {
   const id = req.cookies.user_id
 
@@ -150,9 +143,9 @@ app.get("/urls/new", (req, res) => {
   res.render("urls_new", templateVars);
 });
 
-//
-// LOGIN
-//
+//---------------------------------------------//
+
+// LOGIN && LOGOUT
 app.get("/urls/login", (req, res) => {
   const id = req.cookies.user_id
   const templateVars = { 
@@ -166,28 +159,30 @@ app.post('/urls/login', (req, res) => {
   const email = req.body.email
   const password = req.body.password;
   const user = checkUserEmail(email)
+  const userPassword = user.password
+  const passwordMatching = bcrypt.compareSync(password, userPassword);
 
   if(!user){
     return res.status(400).send("incorect email")
   }
-  if(user.password !== password) {
-    return res.status(400).send('password does not match')
-  }
 
+  if (!passwordMatching) {
+    return res.status(400).send("password does not match")
+  }
+  
   const id = user.id
   res.cookie("user_id", id)
   res.redirect("/urls");
 });
-
-//
-// LOGOUT
-//
 
 app.post('/urls/logout', (req,res) => {
   res.clearCookie('user_id')
   res.redirect("/urls/login");
 });
 
+//---------------------------------------------//
+
+// URLS SHOW
 app.get("/urls/:shortURL", (req, res) => {
   const id = req.cookies.user_id
   const shortURL = req.params.shortURL
@@ -246,9 +241,4 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
-// POST login + cookie
-// app.post('/urls/login', (req,res) => {
-//   const user = req.body.username;
-//   res.cookie('username', user);
-//   res.redirect("/urls");
-// });
+
