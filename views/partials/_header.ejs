@@ -12,21 +12,16 @@
     </div>
       <% if(user && user.email){ %>
         <div>
-          <%= `Hello! You're logged in as: ${user.email}` %>
+          <%= `Welcome back! Logged in as: ${user.email}` %>
         </div>
         <div>
-            <form method="POST" action="/urls/logout">
-              <button type="submit" style="margin-left: 20px;" class="btn btn-outline-light">Logout</button>
-            </form>
+          <form method="post" action="/urls/logout">
+          <button class="btn btn-outline-light">Logout</button>
+        </form>
         </div>
       <% } else { %>
-        <div class="login-container">
-          <form method="POST">
-            <input type="text" placeholder="User email" name="username">
             <a href="/urls/login" class="btn btn-outline-light">Login</a>
             <a href="/urls/register" class="btn btn-outline-light">Register</a>
-          </form>
-        </div>
         <% } %>
   </nav>
 </header>
