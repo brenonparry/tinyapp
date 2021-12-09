@@ -23,17 +23,17 @@
         </tr>
       </thead>
       <tbody>
-        <% for(let url in urls) { %>
+        <% for(const key in urlDatabase) { %>
           <tr>
-            <td><%= url %></td>
-            <td><%= urls[url] %></td>
+            <td><%= key %></td>
+            <td><%= urlDatabase[key].longURL %></td>
             <td>
-              <form method="POST" action="/urls/<%- url %>">
+              <form method="POST" action="/urls/<%- key %>">
                 <button class="btn btn-outline-success">Edit</button>
               </form>
             </td>
             <td>
-            <form method="POST" action="/urls/<%- url %>/delete">
+            <form method="POST" action="/urls/<%- key %>/delete">
               <button class="btn btn-outline-danger">Delete</button>
             </form>
           </td>
