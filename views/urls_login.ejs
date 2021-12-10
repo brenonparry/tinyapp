@@ -10,17 +10,19 @@
 </head>
 <body>
   <%- include('partials/_header') %>
+  <main style="margin: 1em;">
   <h5>Login</h5>
   <form method="POST" action="/urls/login">
-    
-    <label>email</label>
-    <input name="email" type="email" required/>
+
+    <label> email &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+    <input name="email" placeholder="Enter email address" type="email" required/>
     <br />
     <label>password</label>
-    <input name="password" type="password" required/>
+    <input name="password" placeholder="Enter password" type="password" required/>
     <br />
     <button type="submit" class="btn btn-outline-success">Log In</button>
   </form>
+</main>
 
 
 
