@@ -166,13 +166,13 @@ app.post('/urls/login', (req, res) => {
   
   const id = user.id
   // cookie time!
-  req.session.id = id
+  req.session.id = id;
   res.redirect("/urls");
 });
 
 // LOGOUT & DELETE COOKIE
 app.post('/urls/logout', (req,res) => {
-  delete req.session.id // delete the cookie
+  req.session = null; // delete the cookie
   res.redirect("/urls/login");
 });
 
@@ -186,7 +186,7 @@ app.get("/urls/:shortURL", (req, res) => {
   if(id !== urlDatabase[shortURL].userID) { // Checking if requesting user matches url owner
     return res.status(403).send("ah ah ah, that doesnt belong to you!")
   }
-  
+
   const templateVars = { 
     shortURL: shortURL, 
     longURL: urlDatabase[shortURL].longURL,
