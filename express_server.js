@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const PORT = 8080;
 const bodyParser = require("body-parser");
-const cookieParser = require('cookie-parser')
 const bcrypt = require('bcryptjs');
 const cookieSession = require("cookie-session");
 const { checkUserEmail, generateRandomString } = require('./helpers')
@@ -10,7 +9,6 @@ const { checkUserEmail, generateRandomString } = require('./helpers')
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.use(cookieParser());
 app.use(cookieSession({
     name: "session",
     keys: ["I was robbed by a sweet old lady", "I didn't even see it coming"],
