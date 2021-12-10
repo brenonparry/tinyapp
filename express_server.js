@@ -55,6 +55,10 @@ const urlsForUser = (id) => {
 // ROUTES =>
 
 // REGISTER
+app.get("/", (req, res) => {
+  res.redirect("/urls/")
+});
+
 app.get("/urls/register", (req, res) => {
   const id = req.cookies.user_id
   const templateVars = { 
@@ -121,7 +125,7 @@ app.get("/urls/new", (req, res) => {
   const id = req.session.id
 
   if(!id) {
-    res.redirect("/urls/login");
+   return res.redirect("/urls/login");
   }
 
   const templateVars = {
